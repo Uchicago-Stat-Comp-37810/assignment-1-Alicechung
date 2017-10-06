@@ -1,0 +1,412 @@
+---
+title: "Assignment1"
+author: "Alice Mee Seon Chung"
+date: "10/1/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# For loops
+2.
+```{r for loops - 2a}
+Fibonacci1 <- numeric(31)
+Fibonacci1[1] <- Fibonacci1[2] <- 1
+for (i in 3:31) Fibonacci1[i] <- Fibonacci1[i - 2] + Fibonacci1[i - 1]
+
+Fibonacci_ratio <- numeric(30)
+Fibonacci_ratio[1] <- 1 
+for (i in 2:31) Fibonacci_ratio[i-1] <- Fibonacci1[i] / Fibonacci1[i - 1]
+print(Fibonacci_ratio)
+```
+
+(a) Yes, as the table showed the sequence converged to 1.618034, we can say that the sequence appeared to be converging.
+
+```{r for loops - 2b}
+goldenratio = ((1+ ((5)^(1/2)))/2)
+print(goldenratio)
+```
+
+(b) Yes, the sequence converging to this ratio. 
+
+Let $\lim_{n \to \infty}\frac{F_{n+1} }{F_{n}} = \phi$ and $\phi$ is golden ratio $(1+\sqrt{5})/2$. 
+The golden ratio satisfies the property $\phi= 1+\frac{1}{\phi}$    (1). 
+
+Consider the sequence ${R_{n}}=\frac{F_{n+1} }{F_{n}}$, for n = 1,2,3,.. 
+By the definition of Fibonacci numbers, we get ${R_{n}}=\frac{F_{n+1} }{F_{n}}=\frac{F_{n}+F_{n-1}}{F_{n}} = 1+\frac{1}{R_{n-1}}$    (2) 
+
+From (1) and (2) we can deduce that for all n = 1,2,3..., we have 
+$$\left |R_{n}-\phi \right |$ = $\left | \left ( 1+\frac{1}{R_{n-1}} \right ) - \left ( 1+\frac{1}{\phi} \right ) \right |$$
+$$ = \left |\frac{1}{R_{n-1}}-\frac{1}{\phi}\right |$$
+$$ = \left |\frac{\phi- R_{n-1}}{R_{n-1}\phi}\right |$$
+$$ \leq \frac{1}{\phi} \left |R_{n-1} - \phi\right |$$
+$$\leq \left (\frac{1}{\phi}\right )^{n-1} \left |R_{1} - \phi\right |$$
+
+Since $0< 1/\phi<1$, then 
+$$\lim_{n \to \infty}\left ( \frac{1}{\phi} \right ) ^{n-1}= 0 \space\space\space\space\space  \Rightarrow   \space  \lim_{n \to \infty} \left |R_{n} - \phi\right |=0 $$
+
+Therefore, $\lim_{n \to \infty}\frac{F_{n+1} }{F_{n}} = \phi.$
+
+3.
+```{r for loops 3a}
+#(a)
+answer <- 0 
+for (j in 1:5) answer <- answer + j
+print(answer)
+```
+```{r for loops 3b}
+#(b)
+answer <- NULL
+for (j in 1:5) answer <- c(answer,j)
+print(answer)
+```
+```{r for loops 3c}
+#(c)
+answer <- 0 
+for (j in 1:5) answer <- c(answer,j)
+print(answer)
+```
+```{r for loops 3d}
+#(d)
+answer <- 1
+for (j in 1:5) answer <- answer * j
+print(answer)
+```
+```{r for loops 3e}
+#(e)
+answer <- 3
+for (j in 1:15) answer <- c(answer, (7 * answer[j]) %% 31)
+print(answer)
+```
+No. I am able to predict successive elements because I kow the rule used to determine the sequence.
+
+# If statements
+4.
+```{r if condition - 4}
+GICbank <- function(P, n){
+  if (n<=3) 
+    rate<- 0.04
+  else 
+    rate<-0.05
+  return (P * (((1+rate)^n)-1))
+}
+```
+
+5.
+```{r if condition - 5}
+payment <- function(n, P, open = TRUE){
+  if (open == TRUE)
+    i = 0.005
+  else
+    i = 0.004
+  return ((P * i) / (1-((1+i)^(-n))))
+}
+```
+
+# While statements
+2.
+```{r while -2}
+Fibonacci<-c(1,1) 
+  while (max(Fibonacci)<300){ 
+      Fibonacci <- c(Fibonacci, Fibonacci[length(Fibonacci) - 1] 
+                     + Fibonacci[length(Fibonacci)]) 
+} 
+print(Fibonacci)
+```
+
+4.
+```{r while -4-1}
+# original
+i0 <- 0.006
+i1 <- 0
+while (abs(i1 - i0)>= 0.000001){
+  i1 <- i0
+  i0 <- (1-(1+i1)^(-20))/19
+}
+print(i1)
+```
+
+```{r while -4-2}
+# different interest rate
+i01 <- 0.002
+i11 <- 0
+while (abs(i11 - i01)>= 0.000001){
+  i11 <- i01
+  i01 <- (1-(1+i11)^(-20))/19
+}
+print(i11)
+```
+With different starting guesses, the intereste rate $i$ changes. 
+
+5.
+```{r while -5}
+i02 <- 0.006
+i12 <- 0
+c <-0
+while (abs(i12 - i02) >= 0.000001){
+  c = c + 1
+  i12 <- i02
+  i02 <- (1-(1+i12)^(-20))/19
+}
+print(i12)
+print(c)
+```
+The number of iterations required to get two successive values of the interest rate that are less than 0.000001 apart is 74. 
+
+# Break statements
+2.
+```{r break 2}
+#(a)
+Eratosthenes <- function(n) {
+# Print prime numbers up to n (based on the sieve of Eratosthenes)
+  if (n >= 2) {
+    sieve <- seq(2, n)
+    primes <- c()
+    while (length(sieve) > 0) {
+      p <- sieve[1]
+      print(p)
+      primes <- c(primes, p)
+      print(primes)
+      sieve <- sieve[(sieve %% p) != 0]
+      print(sieve)
+      }
+    return(primes)
+    } else {
+      stop("Input value of n should be at least 2.")
+    }
+}
+print(Eratosthenes(3))
+```
+
+(b) 
+From above `Eratosthenes` function, during while loop it removes the number that can be divided by $p$, that is, multiples of p from all the sequence in sieve. So the multiples of $p$ that satisfies this condition,$(p∗1, p*2,...p∗p) <= (sqrt(n)∗sqrt(n)=n)$ are removed from sieve. Then, once $p>=sqrt(n)$, when we see the remains from sieve, there is no number can be removed. So here, we can say that  the once $p >= sqrt(n)$ all remaining entries in sieve are prime. 
+
+
+```{r break 2-c}
+#(c)
+Eratosthenes1 <- function(n) {
+# Print prime numbers up to n (based on the sieve of Eratosthenes)
+  if (n >= 2) {
+    sieve <- seq(2, n)
+    primes <- c()
+    while (length(sieve) > 0) {
+      p <- sieve[1]
+      primes <- c(primes, p)
+      sieve <- sieve[(sieve %% p) != 0]
+      if (p >= sqrt(n)){
+        primes <- c(primes, sieve)
+        break
+      }
+    }
+    return(primes)
+    } else {
+      stop("Input value of n should be at least 2.")
+    }
+  }
+```
+
+# Functions
+2.
+```{r functions 2 -a}
+compound.interest <- function(n, P, ir){
+  amount = (P * ((1 + ir)^n))
+  return(amount)
+}
+```
+```{r functions 2 -b}
+print(compound.interest(30, 1000, 0.01))
+```
+Mr.Ng will have $\$1347.849$ in the bank at the end of 30 months with deposies $1000 and the intereste rate 1% per month. 
+
+3.
+```{r function 3}
+# define functions
+f<-function(x){x^3-x-1}
+
+# bisection method
+bisection <- function (f, k, l, num = 100, eps = 1e-06) {
+    h = abs(l - k)/num
+    i = 0
+    j = 0
+    k1 = 0
+    l1 = 0
+    while (i <= num) {
+        k1 = k + i * h
+        l1 = k1 + h
+        if (f(k1) == 0) {
+            print(k1)
+            print(f(k1))
+        }
+        else if (f(l1) == 0) {
+            print(l1)
+            print(f(l1))
+        }
+        else if (f(k1) * f(l1) < 0) {
+            repeat {
+                if (abs(l1 - k1) < eps) 
+                  break
+                x <- (k1 + l1)/2
+                if (f(k1) * f(x) < 0) 
+                  l1 <- x
+                else k1 <- x
+            }
+            print(j + 1)
+            j = j + 1
+            print((k1 + l1)/2)
+            print(f((k1 + l1)/2))
+        }
+        i = i + 1
+    }
+    if (j == 0) 
+        print("Fail")
+    else print("Success")
+}
+
+bisection(f, 1, 10)
+```
+
+# Putting it all together, checking
+1.
+```{r putting it all to gether 1}
+mergesort1 <- function(x, decreasing=FALSE){
+  if(decreasing==FALSE){
+  len <- length(x)
+  if (len<2) result <- x
+  else{
+    y <- x[1:(len/2)]
+    z <- x[((len/2)+1):len]
+    y <- mergesort(y)
+    z <- mergesort(z)
+    result <- c() 
+    while(min(length(y), length(z))>0){
+      if(y[1]<z[1]){
+        result <- c(result, y[1])
+        y <- y[-1]
+        }else{
+          result <- c(result, z[1])
+          z <- z[-1]
+        }
+      }
+    if(length(y)>0)
+      result <- c(result, y)
+    else
+      result <- c(result, z)
+    }
+  return(result)
+  }else{
+    len <- length(x)
+    if (len<2) result <- x
+    else{
+      y <- x[1:(len/2)]
+      z <- x[((len/2)+1):len]
+      y <- mergesort(y, decreasing=TRUE)
+      z <- mergesort(z, decreasing=TRUE)
+      result <- c()
+      while(min(length(y), length(z))>0){
+        if(y[1]>z[1]){
+          result <- c(result, y[1])
+          y <- y[-1]
+          }else{
+            result <- c(result, z[1])
+            z <- z[-1]
+          }
+        }
+      if(length(y)>0)
+        result <- c(result, y)
+      else
+        result <- c(result, z)
+      }
+    return(result)
+  }
+  }
+```
+
+2.
+```{r putting it all to gether 2}
+x<-0
+y<-4
+f<-function(x,y){x+y}
+g<-function(x,y){x^2+2*y^2-2}
+newton<-function (x, y, eps = 1e-06, i=1) {
+    fx <-function(x,y){1}
+    fy<-function(x,y){1}
+    gx<-function(x,y){2*x}
+    gy<-function(x,y){4*y}
+    d<-function(x,y){fx(x,y)*gy(x,y)-fy(x,y)*gx(x,y)}
+    a<-f(x,y)
+    b<-g(x,y)
+    
+    if ((a == 0) && (b == 0)){
+      print(x)
+      print(y)
+    }else{ 
+      while ((abs(a) >= eps && abs(b) >= eps)){
+       x <- x - (((gy(x,y)*f(x,y))-(fy(x,y)*g(x,y))))/d(x,y)
+       y <- y - (((fx(x,y)*g(x,y))-(gx(x,y)*f(x,y))))/d(x,y)
+       a<-f(x,y)
+       b<-g(x,y)
+    }
+    print((c(x,y)))
+  }
+}
+
+newton(x,y)
+
+results<-newton(x,y)
+xsolution<-results[1]
+ysolution<-results[2]
+```
+From above function, I get the two solutions, $x = -0.8164966$ and $y = -0.8164966$ respectively. 
+
+```{r putting it all together 2 - bb}
+print("The value of f(x,y) is")
+print(f(xsolution,ysolution))
+print("The value of g(x,y) is")
+print(g(xsolution,ysolution))
+```
+As a check on my numerical result, I applied those two values of solutions to original function of f and g, and the results are close enough to 0. So my two solutions seems correct.
+
+# Chapter excercises
+1.
+```{r Ch4 exercise 1}
+directpoly <- function(x, coefs){
+  solution <- 0
+  n <- length(coefs)
+  for (i in 1:n){
+    solution <- solution + coefs[i] * (x^(n-i))
+  }
+  return(solution)
+}
+```
+
+2.
+```{r Ch4 exercise 2}
+hornerpoly <- function(x, coefs){
+  n <-length(coefs)
+  a <- matrix(0, length(x), n)
+  a[, n] <- coefs[1]
+  for (i in (n-1):1){
+    a[,i] <- a[,i+1]*x + coefs[n-i+1]
+  }
+  return(a[,1])
+}
+```
+
+3.
+```{r Ch4 exercise 3-a}
+#(a)
+print(system.time(directpoly(x=seq(-10, 10, length=5000000),
+c(1, -2, 2, 3, 4, 6, 7))))
+print(system.time(hornerpoly(x=seq(-10, 10, length=5000000),
+c(1, -2, 2, 3, 4, 6, 7))))
+```
+
+```{r Ch4 exercise 3-b}
+#(b)
+print(system.time(directpoly(x=10,c(2,17,-3))))
+print(system.time(hornerpoly(x=10,c(2,17,-3))))
+```
+
+Compared the results with the first results in (a) and (b), we can say that the time difference between two algorithms gets smaller or none as the number of polynomial coefficiencts is smaller. 
