@@ -325,40 +325,44 @@ mergesort1 <- function(x, decreasing=FALSE){
 
 2.
 ```{r putting it all to gether 2}
-x<-0
-y<-4
-f<-function(x,y){x+y}
-g<-function(x,y){x^2+2*y^2-2}
-newton<-function (x, y, eps = 1e-06, i=1) {
-    fx <-function(x,y){1}
-    fy<-function(x,y){1}
-    gx<-function(x,y){2*x}
-    gy<-function(x,y){4*y}
-    d<-function(x,y){fx(x,y)*gy(x,y)-fy(x,y)*gx(x,y)}
-    a<-f(x,y)
-    b<-g(x,y)
-    
-    if ((a == 0) && (b == 0)){
+library(Deriv)
+#(a)
+newton<-function (f, g, x0, y0, eps = 1e-06) {
+  fx <- Deriv(f, "x")
+  fy <- Deriv(f, "y")  
+  gx <- Deriv(g, "x")
+  gy <- Deriv(g, "y")  
+  x <- x0
+  y <- y0
+  a<-f(x,y)
+  b<-g(x,y)
+  d<-fx(x,y)*gy(x,y) - fy(x,y)*gx(x,y)
+  if ((abs(a) == 0) || ((abs(b) == 0))){
       print(x)
       print(y)
     }else{ 
-      while ((abs(a) >= eps && abs(b) >= eps)){
-       x <- x - (((gy(x,y)*f(x,y))-(fy(x,y)*g(x,y))))/d(x,y)
-       y <- y - (((fx(x,y)*g(x,y))-(gx(x,y)*f(x,y))))/d(x,y)
-       a<-f(x,y)
-       b<-g(x,y)
+      while ((abs(a)>= eps || abs(b) >= eps)){
+      x <- x - (((gy(x,y)*f(x,y))-(fy(x,y)*g(x,y))))/d
+      y <- y - (((fx(x,y)*g(x,y))-(gx(x,y)*f(x,y))))/d
+      a<-f(x,y)
+      b<-g(x,y)
     }
     print((c(x,y)))
   }
 }
 
-newton(x,y)
+#(b)
+# define user-supplied functions
+f<-function(x,y){x+y}
+g<-function(x,y){x^2+2*y^2-2}
 
-results<-newton(x,y)
+newton(f,g,0,10)
+
+results<-newton(f,g,0,10)
 xsolution<-results[1]
 ysolution<-results[2]
 ```
-From above function, I get the two solutions, $x = -0.8164966$ and $y = -0.8164966$ respectively. 
+From above function, I get the two solutions, $x =$ `r xsolution` and $y =$ `r ysolution` respectively. 
 
 ```{r putting it all together 2 - bb}
 print("The value of f(x,y) is")

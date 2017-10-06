@@ -437,48 +437,52 @@ bisection(f, 1, 10)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li></li>
 </ol>
-<pre class="r"><code>x&lt;-0
-y&lt;-4
-f&lt;-function(x,y){x+y}
-g&lt;-function(x,y){x^2+2*y^2-2}
-newton&lt;-function (x, y, eps = 1e-06, i=1) {
-    fx &lt;-function(x,y){1}
-    fy&lt;-function(x,y){1}
-    gx&lt;-function(x,y){2*x}
-    gy&lt;-function(x,y){4*y}
-    d&lt;-function(x,y){fx(x,y)*gy(x,y)-fy(x,y)*gx(x,y)}
-    a&lt;-f(x,y)
-    b&lt;-g(x,y)
-    
-    if ((a == 0) &amp;&amp; (b == 0)){
+<pre class="r"><code>library(Deriv)
+#(a)
+newton&lt;-function (f, g, x0, y0, eps = 1e-06) {
+  fx &lt;- Deriv(f, &quot;x&quot;)
+  fy &lt;- Deriv(f, &quot;y&quot;)  
+  gx &lt;- Deriv(g, &quot;x&quot;)
+  gy &lt;- Deriv(g, &quot;y&quot;)  
+  x &lt;- x0
+  y &lt;- y0
+  a&lt;-f(x,y)
+  b&lt;-g(x,y)
+  d&lt;-fx(x,y)*gy(x,y) - fy(x,y)*gx(x,y)
+  if ((abs(a) == 0) || ((abs(b) == 0))){
       print(x)
       print(y)
     }else{ 
-      while ((abs(a) &gt;= eps &amp;&amp; abs(b) &gt;= eps)){
-       x &lt;- x - (((gy(x,y)*f(x,y))-(fy(x,y)*g(x,y))))/d(x,y)
-       y &lt;- y - (((fx(x,y)*g(x,y))-(gx(x,y)*f(x,y))))/d(x,y)
-       a&lt;-f(x,y)
-       b&lt;-g(x,y)
+      while ((abs(a)&gt;= eps || abs(b) &gt;= eps)){
+      x &lt;- x - (((gy(x,y)*f(x,y))-(fy(x,y)*g(x,y))))/d
+      y &lt;- y - (((fx(x,y)*g(x,y))-(gx(x,y)*f(x,y))))/d
+      a&lt;-f(x,y)
+      b&lt;-g(x,y)
     }
     print((c(x,y)))
   }
 }
 
-newton(x,y)</code></pre>
-<pre><code>## [1] -0.8164966  0.8164966</code></pre>
-<pre class="r"><code>results&lt;-newton(x,y)</code></pre>
-<pre><code>## [1] -0.8164966  0.8164966</code></pre>
+#(b)
+# define user-supplied functions
+f&lt;-function(x,y){x+y}
+g&lt;-function(x,y){x^2+2*y^2-2}
+
+newton(f,g,0,10)</code></pre>
+<pre><code>## [1] -0.8164968  0.8164968</code></pre>
+<pre class="r"><code>results&lt;-newton(f,g,0,10)</code></pre>
+<pre><code>## [1] -0.8164968  0.8164968</code></pre>
 <pre class="r"><code>xsolution&lt;-results[1]
 ysolution&lt;-results[2]</code></pre>
-<p>From above function, I get the two solutions, <span class="math inline">\(x = -0.8164966\)</span> and <span class="math inline">\(y = -0.8164966\)</span> respectively.</p>
+<p>From above function, I get the two solutions, <span class="math inline">\(x =\)</span> -0.8164968 and <span class="math inline">\(y =\)</span> 0.8164968 respectively.</p>
 <pre class="r"><code>print(&quot;The value of f(x,y) is&quot;)</code></pre>
 <pre><code>## [1] &quot;The value of f(x,y) is&quot;</code></pre>
 <pre class="r"><code>print(f(xsolution,ysolution))</code></pre>
-<pre><code>## [1] -3.993542e-08</code></pre>
+<pre><code>## [1] -3.490708e-08</code></pre>
 <pre class="r"><code>print(&quot;The value of g(x,y) is&quot;)</code></pre>
 <pre><code>## [1] &quot;The value of g(x,y) is&quot;</code></pre>
 <pre class="r"><code>print(g(xsolution,ysolution))</code></pre>
-<pre><code>## [1] 1.283585e-07</code></pre>
+<pre><code>## [1] 8.923486e-07</code></pre>
 <p>As a check on my numerical result, I applied those two values of solutions to original function of f and g, and the results are close enough to 0. So my two solutions seems correct.</p>
 </div>
 <div id="chapter-excercises" class="section level1">
@@ -513,11 +517,11 @@ ysolution&lt;-results[2]</code></pre>
 print(system.time(directpoly(x=seq(-10, 10, length=5000000),
 c(1, -2, 2, 3, 4, 6, 7))))</code></pre>
 <pre><code>##    user  system elapsed 
-##   1.591   0.125   1.801</code></pre>
+##   1.582   0.131   1.739</code></pre>
 <pre class="r"><code>print(system.time(hornerpoly(x=seq(-10, 10, length=5000000),
 c(1, -2, 2, 3, 4, 6, 7))))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.750   0.427   1.327</code></pre>
+##   0.766   0.464   1.402</code></pre>
 <pre class="r"><code>#(b)
 print(system.time(directpoly(x=10,c(2,17,-3))))</code></pre>
 <pre><code>##    user  system elapsed 
