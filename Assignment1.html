@@ -334,48 +334,41 @@ Eratosthenes1 &lt;- function(n) {
 f&lt;-function(x){x^3-x-1}
 
 # bisection method
-bisection &lt;- function (f, k, l, num = 100, eps = 1e-06) {
-    h = abs(l - k)/num
-    i = 0
-    j = 0
+bisection &lt;- function (f, k, l, num = 100) {
+    m = 0
+    n = 0
     k1 = 0
     l1 = 0
-    while (i &lt;= num) {
-        k1 = k + i * h
-        l1 = k1 + h
+    sol = abs(l-k)/num
+    while (m &lt;= num) {
+        k1 = k + m*sol
+        l1 = k1+sol
         if (f(k1) == 0) {
             print(k1)
-            print(f(k1))
         }
         else if (f(l1) == 0) {
             print(l1)
-            print(f(l1))
         }
-        else if (f(k1) * f(l1) &lt; 0) {
+        else if (f(k1)*f(l1) &lt; 0) {
             repeat {
-                if (abs(l1 - k1) &lt; eps) 
+                if (abs(l1-k1) &lt; 1e-06) 
                   break
-                x &lt;- (k1 + l1)/2
-                if (f(k1) * f(x) &lt; 0) 
-                  l1 &lt;- x
-                else k1 &lt;- x
+                sol1 &lt;- (k1+l1)/2
+                if (f(k1)*f(sol1) &lt; 0) 
+                  l1 &lt;- sol1
+                else k1 &lt;- sol1
             }
-            print(j + 1)
-            j = j + 1
-            print((k1 + l1)/2)
-            print(f((k1 + l1)/2))
+            n = n+1
+            print((k1+l1)/2)
         }
-        i = i + 1
+        m = m+1
     }
-    if (j == 0) 
-        print(&quot;Fail&quot;)
-    else print(&quot;Success&quot;)
+    if (n == 0) {print(&quot;Fail&quot;)}
+    else{print(&quot;Success&quot;)}
 }
 
 bisection(f, 1, 10)</code></pre>
-<pre><code>## [1] 1
-## [1] 1.324718
-## [1] -8.8148e-07
+<pre><code>## [1] 1.324718
 ## [1] &quot;Success&quot;</code></pre>
 </div>
 <div id="putting-it-all-together-checking" class="section level1">
@@ -515,18 +508,18 @@ ysolution&lt;-results[2]</code></pre>
 print(system.time(directpoly(x=seq(-10, 10, length=5000000),
 c(1, -2, 2, 3, 4, 6, 7))))</code></pre>
 <pre><code>##    user  system elapsed 
-##   1.684   0.129   1.829</code></pre>
+##   1.574   0.141   1.747</code></pre>
 <pre class="r"><code>print(system.time(hornerpoly(x=seq(-10, 10, length=5000000),
 c(1, -2, 2, 3, 4, 6, 7))))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.834   0.459   1.535</code></pre>
+##   0.900   0.368   1.538</code></pre>
 <pre class="r"><code>#(b)
-print(system.time(directpoly(x=10,c(2,17,-3))))</code></pre>
+print(system.time(directpoly(x=seq(-10, 10, length=5000000),c(2,17,-3))))</code></pre>
 <pre><code>##    user  system elapsed 
-##       0       0       0</code></pre>
-<pre class="r"><code>print(system.time(hornerpoly(x=10,c(2,17,-3))))</code></pre>
+##   0.311   0.050   0.370</code></pre>
+<pre class="r"><code>print(system.time(hornerpoly(x=seq(-10, 10, length=5000000),c(2,17,-3))))</code></pre>
 <pre><code>##    user  system elapsed 
-##       0       0       0</code></pre>
+##   0.278   0.117   0.407</code></pre>
 <p>Compared the results with the first results in (a) and (b), we can say that the time difference between two algorithms gets smaller or none as the number of polynomial coefficiencts is smaller.</p>
 </div>
 

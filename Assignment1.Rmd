@@ -184,6 +184,8 @@ print(Eratosthenes(3))
 From above `Eratosthenes` function, during while loop it removes the number that can be divided by $p$, that is, multiples of p from all the sequence in sieve. So the multiples of $p$ that satisfies this condition,$(p∗1, p*2,...p∗p) <= (sqrt(n)∗sqrt(n)=n)$ are removed from sieve. Then, once $p>=sqrt(n)$, when we see the remains from sieve, there is no number can be removed. So here, we can say that  the once $p >= sqrt(n)$ all remaining entries in sieve are prime. 
 
 
+
+
 ```{r break 2-c}
 #(c)
 Eratosthenes1 <- function(n) {
@@ -226,42 +228,37 @@ Mr.Ng will have $\$1347.849$ in the bank at the end of 30 months with deposies $
 f<-function(x){x^3-x-1}
 
 # bisection method
-bisection <- function (f, k, l, num = 100, eps = 1e-06) {
-    h = abs(l - k)/num
-    i = 0
-    j = 0
+bisection <- function (f, k, l, num = 100) {
+    m = 0
+    n = 0
     k1 = 0
     l1 = 0
-    while (i <= num) {
-        k1 = k + i * h
-        l1 = k1 + h
+    sol = abs(l-k)/num
+    while (m <= num) {
+        k1 = k + m*sol
+        l1 = k1+sol
         if (f(k1) == 0) {
             print(k1)
-            print(f(k1))
         }
         else if (f(l1) == 0) {
             print(l1)
-            print(f(l1))
         }
-        else if (f(k1) * f(l1) < 0) {
+        else if (f(k1)*f(l1) < 0) {
             repeat {
-                if (abs(l1 - k1) < eps) 
+                if (abs(l1-k1) < 1e-06) 
                   break
-                x <- (k1 + l1)/2
-                if (f(k1) * f(x) < 0) 
-                  l1 <- x
-                else k1 <- x
+                sol1 <- (k1+l1)/2
+                if (f(k1)*f(sol1) < 0) 
+                  l1 <- sol1
+                else k1 <- sol1
             }
-            print(j + 1)
-            j = j + 1
-            print((k1 + l1)/2)
-            print(f((k1 + l1)/2))
+            n = n+1
+            print((k1+l1)/2)
         }
-        i = i + 1
+        m = m+1
     }
-    if (j == 0) 
-        print("Fail")
-    else print("Success")
+    if (n == 0) {print("Fail")}
+    else{print("Success")}
 }
 
 bisection(f, 1, 10)
@@ -407,8 +404,8 @@ c(1, -2, 2, 3, 4, 6, 7))))
 
 ```{r Ch4 exercise 3-b}
 #(b)
-print(system.time(directpoly(x=10,c(2,17,-3))))
-print(system.time(hornerpoly(x=10,c(2,17,-3))))
+print(system.time(directpoly(x=seq(-10, 10, length=5000000),c(2,17,-3))))
+print(system.time(hornerpoly(x=seq(-10, 10, length=5000000),c(2,17,-3))))
 ```
 
 Compared the results with the first results in (a) and (b), we can say that the time difference between two algorithms gets smaller or none as the number of polynomial coefficiencts is smaller. 
